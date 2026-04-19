@@ -37,17 +37,14 @@ This application connects to an MCP server over **streamable HTTP (SSE)**, invok
 
 ## 🏗️ Architecture
 
-```mermaid
-graph TD
-    UI[Web UI (Thymeleaf + JS)] -->|REST| Client[Spring Boot MCP Client]
-    Client -->|HTTP SSE + API Key| MCP[MCP Server]
-    MCP -->|Tool Execution| LLM[OpenAI / LLM]
-    LLM --> MCP
-    MCP --> Client
-    Client --> UI
-```
-
----
+| Layer | Component | Responsibility |
+|------|----------|----------------|
+| UI | Thymeleaf + JS | User input & rendering |
+| API | `/fraud/analyze` | Accepts NL query |
+| Client | MCP Client | Communicates with MCP server |
+| Transport | HTTP SSE | Streaming communication |
+| Server | MCP Server | Executes tools |
+| Intelligence | LLM + Rules | Fraud analysis |
 
 ## 📦 Tech Stack
 
@@ -183,9 +180,7 @@ Identifies suspicious behavior **across multiple transactions**, such as:
 
 ## 📁 Project Structure
 
-## 📁 Project Structure
-
-```text
+```
 src/main/java/com/banking/mcp/
 │
 ├── config/
@@ -197,6 +192,7 @@ src/main/java/com/banking/mcp/
 │
 └── ui/
     └── UiController.java
+```
 
 ---
 
