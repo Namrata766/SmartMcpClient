@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Fraud Detection Console</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Markdown parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Mermaid -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+        }
+
+        header {
+            background-color: #d71e28;
+            color: white;
+            padding: 16px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            border: 2px solid #d71e28;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .buttons {
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .analyze {
+            background-color: #d71e28;
+            color: white;
+        }
+
+        .clear {
+            background-color: #ffcc00;
+            color: black;
+        }
+
+        .output {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f8f8f8;
+            border-left: 6px solid #d71e28;
+        }
+
+        .loading {
+            color: #d71e28;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<header>
+    Commercial Banking Fraud Detection Console
+</header>
+
+<div class="container">
+
+    <textarea id="query" placeholder="Enter natural language query..."></textarea>
+
+    <div class="buttons">
+        <button class="analyze" onclick="analyze()">Analyze Fraud</button>
+        <button class="clear" onclick="clearAll()">Clear</button>
+    </div>
+
+    <div id="status" class="loading"></div>
+
+    <div id="output" class="output"></div>
+
+</div>
+
+<script>
+
+    mermaid.initialize({ startOnLoad: true });
+
+    async function analyze() {
+        const query = document.getElementById("query").value;
+
+        if (!query) return;
+
+        document.getElementById("status").innerText = "Analyzing...";
+        document.getElementById("output").innerHTML = "";
+
+        const response = await fetch("/fraud/analyze", {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain"
+            },
+            body: query
+        });
+
+        const text = await response.text();
+
+        document.getElementById("status").innerText = "";
+
+        // Render Markdown
+        const html = marked.parse(text);
+
+        document.getElementById("output").innerHTML = html;
+
+        // Re-render Mermaid blocks
+        mermaid.init(undefined, document.querySelectorAll(".language-mermaid"));
+    }
+
+    function clearAll() {
+        document.getElementById("query").value = "";
+        document.getElementById("output").innerHTML = "";
+        document.getElementById("status").innerText = "";
+    }
+
+</script>
+
+</body>
+</html>
