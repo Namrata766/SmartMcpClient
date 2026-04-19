@@ -183,7 +183,9 @@ Identifies suspicious behavior **across multiple transactions**, such as:
 
 ## 📁 Project Structure
 
-```
+## 📁 Project Structure
+
+```text
 src/main/java/com/banking/mcp/
 │
 ├── config/
@@ -195,7 +197,6 @@ src/main/java/com/banking/mcp/
 │
 └── ui/
     └── UiController.java
-```
 
 ---
 
